@@ -40,6 +40,9 @@ class ProjectsController < ApplicationController
     Project.transaction do
       @project.save
       @project.add_member!(current_user)
+      if Project.default_for_user(current_user) == nil
+        @project.project_members.last.make_default!
+      end
     end
     respond_with(@project)
   end
