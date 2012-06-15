@@ -39,7 +39,7 @@
   <% checkbox_options[:method_for_value] ||= 'id' %>
 <% end %>
 
-<% num_cols = 4 %>
+<% num_cols = 5 %>
 
 <%= content_for :javascript do %>
   <%= javascript_tag do %>
@@ -59,10 +59,11 @@
           <% num_cols += 1 %>
           <th style='padding-right:25px'><%= check_box_tag("toggle_checkbox", false) %></th>
         <% end %>
-        <th width="15%"># , Version</th>
+        <th width="10%"># , Version</th>
+        <th width="10%" style="text-align:center">Votes (U-D)</th>
         <th width="10%" style="text-align:center">Type</th>
         <th width="15%" style="text-align:center">Modified Date</th>
-        <th width="60%">Quick Look</th>
+        <th width="55%">Quick Look</th>
      </tr>
      <tr id="none_row" style="<%= !entries.empty? ? 'display:none' : '' %>">
         <td colspan="<%= num_cols %>" style="text-align:center">[ No questions ]</td>

@@ -19,6 +19,7 @@ render  :partial => 'questions/fill_row',
       <td><%= check_box_tag("#{checkbox_options[:name_base]}[]", checkbox_value, false, {:class => 'pq_checkbox'}) %></td>
   <% end %>
       <td><%= question_id_link(question) %></td>
+      <td style="text-align:center"><%= question.votes.positive.count %>-<%= question.votes.negative.count %></td>
       <td style="text-align:center"><%= question_type_abbreviation(question) %></td>
       <td style="text-align:center"><%= question.modified_at.strftime('%b %d %Y') %></td>
       <td class="tex2jax_ignore"><%= question_preview_link(question) %></td>
