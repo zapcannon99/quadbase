@@ -13,7 +13,7 @@ class QuestionList < ActiveRecord::Base
   attr_accessible :name, :question_list_members_attributes, :question_list_questions_attributes  
   
   def add_member!(member)
-    QuestionList.create(:question_list => self, :user => member)
+    QuestionListMember.create(:question_list => self, :user => member)
   end
   
   def is_member?(user)
