@@ -122,6 +122,31 @@ Quadbase::Application.routes.draw do
       delete 'destroy'
     end
   end
+  
+  resources :question_lists do
+    resources :question_list_members, :only => [:create, :new] do
+      collection do 
+        post 'search'
+      end
+    end
+    commentable
+  end
+  
+  resources :question_list_members, :only => [:destroy] do
+    put 'make_default'
+  end
+  
+  resources :question_list_questions, :only => [] do
+    collection do
+      put 'update'
+      put 'copy'
+      put 'move'
+      put 'preview_publish', :to => 'question_list_questions#preview_publish'
+      put 'attribution'
+      delete 'destroy'
+    end
+  end
+  
   get 'questions/search'
   resources :questions do
     put 'preview'

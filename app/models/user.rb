@@ -10,6 +10,8 @@ class User < ActiveRecord::Base
   has_many :question_collaborators
   has_many :project_members
   has_many :projects, :through => :project_members
+  has_many :question_list_members
+  has_many :question_lists, :through => :question_list_members
   has_many :published_questions,
            :class_name => "Question",
            :foreign_key => "publisher_id"

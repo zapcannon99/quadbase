@@ -1,0 +1,14 @@
+
+<% @errors = @question_list.errors %>
+
+<%= form_for(@question_list) do |f| %>
+
+   <table class="left_heading">
+      <tr>
+         <th>Question List Name</th>
+         <td><%= f.text_field :name %></td>
+      </tr>
+   </table>
+   <br/>
+   <%= f.submit(nil , :class => "#{submit_classes}") %>
+<% end %>

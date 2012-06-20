@@ -1,5 +1,5 @@
 
-<% @links = [ link_to('New List', new_project_path) ] %>
+<% @links = [ link_to('New List', new_question_list_path) ] %>
 
 <%= pageHeading("My Question Lists") %>
 
@@ -14,6 +14,19 @@
       <th></th>
    </tr>
    
+    
+  <% @question_list_members.each do |member| %>
+     <% question_list = member.question_list %>
+    <tr>
+      <td><%= link_to question_list.name, question_list_path(question_list) %></td>
+      <td>
+      </td>
+      <td style="text-align:center"><%= question_list.question_list_questions.size %></td>
+      <td style="text-align:center"><%= question_list.question_list_members.size %></td>       
+      
+  <% end %>
+  
+      
       
 </table>
 
