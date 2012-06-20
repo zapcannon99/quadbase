@@ -1,0 +1,3 @@
+
+class QuestionListMembersController < ApplicationController
+end
