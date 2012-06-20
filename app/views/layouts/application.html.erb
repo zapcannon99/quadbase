@@ -128,6 +128,9 @@
                	<li <%= "class=selected" if is_tab_selected?(:browse) %>>
                	   <%= link_to "Find questions", questions_path %>
                	</li>
+               	<li <%= "class=selected" if is_tab_selected?(:browse) %>>
+               	   <%= link_to "Question Lists", question_lists_path %>
+               	</li>
                	
                	<% if user_signed_in? %>
                	<li <%= "class=selected" if is_tab_selected?(:projects) %>>

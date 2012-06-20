@@ -1,6 +1,6 @@
 
 class QuestionListsController < ApplicationController
-  def hello
-    @message = "Hello World!"
+  def index
+    @message = "Main page"
   end
 end

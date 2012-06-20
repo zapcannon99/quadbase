@@ -82,6 +82,7 @@ Quadbase::Application.routes.draw do
   end
 
   get "inbox", :to => 'inbox#index', :as => "inbox"
+  get "question_lists", :to => 'question_lists#index', :as => "question_lists"
 
   get 'help', :to => 'help#index', :as => 'help'
   get 'help/faq', :to => 'help#faq', :as => 'faq'
