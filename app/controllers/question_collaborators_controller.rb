@@ -5,7 +5,7 @@ class QuestionCollaboratorsController < ApplicationController
   include ActionView::Helpers::JavaScriptHelper
 
   before_filter { @use_columns = true }
-  before_filter :include_jquery
+  before_filter :include_jquery 
 
   layout 'questions', :only => :index
 
