@@ -5,14 +5,14 @@ class QuestionCollaboratorsController < ApplicationController
   include ActionView::Helpers::JavaScriptHelper
 
   before_filter { @use_columns = true }
-  before_filter :include_jquery 
+  before_filter :include_jquery
 
   layout 'questions', :only => :index
 
   before_filter :get_question
   
   helper :questions
-asd
+
   def new
     @action_dialog_title = "Add a collaborator"
     @action_search_path = search_question_question_collaborators_path(params[:question_id])
