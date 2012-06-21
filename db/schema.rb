@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120424015013) do
+ActiveRecord::Schema.define(:version => 20120621191601) do
 
   create_table "announcements", :force => true do |t|
     t.integer  "user_id"
@@ -92,6 +92,28 @@ ActiveRecord::Schema.define(:version => 20120424015013) do
     t.boolean  "is_default"
   end
 
+  create_table "list_members", :force => true do |t|
+    t.integer  "list_id"
+    t.integer  "user_id"
+    t.boolean  "is_default"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "list_questions", :force => true do |t|
+    t.integer  "list_id"
+    t.integer  "question_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "lists", :force => true do |t|
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.boolean  "is_public"
+  end
+
   create_table "logic_libraries", :force => true do |t|
     t.string   "name"
     t.integer  "number"
@@ -125,27 +147,6 @@ ActiveRecord::Schema.define(:version => 20120424015013) do
 
   create_table "messages", :force => true do |t|
     t.string   "subject"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "project_members", :force => true do |t|
-    t.integer  "project_id"
-    t.integer  "user_id"
-    t.boolean  "is_default"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "project_questions", :force => true do |t|
-    t.integer  "project_id"
-    t.integer  "question_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "projects", :force => true do |t|
-    t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
