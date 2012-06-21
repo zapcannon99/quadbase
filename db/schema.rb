@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120424015013) do
+ActiveRecord::Schema.define(:version => 20120620182841) do
 
   create_table "announcements", :force => true do |t|
     t.integer  "user_id"
@@ -175,6 +175,28 @@ ActiveRecord::Schema.define(:version => 20120424015013) do
     t.integer  "deriver_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "question_list_members", :force => true do |t|
+    t.integer  "question_list_id"
+    t.integer  "user_id"
+    t.boolean  "is_default"
+    t.datetime "created_at",       :null => false
+    t.datetime "updated_at",       :null => false
+  end
+
+  create_table "question_list_questions", :force => true do |t|
+    t.integer  "question_list_id"
+    t.integer  "question_id"
+    t.datetime "created_at",       :null => false
+    t.datetime "updated_at",       :null => false
+  end
+
+  create_table "question_lists", :force => true do |t|
+    t.string   "name"
+    t.boolean  "public"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
   end
 
   create_table "question_parts", :force => true do |t|
