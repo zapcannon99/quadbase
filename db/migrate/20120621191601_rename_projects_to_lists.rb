@@ -9,7 +9,6 @@ class RenameProjectsToLists < ActiveRecord::Migration
     rename_table :project_questions, :list_questions
     rename_column :list_questions, :project_id, :list_id
     
-    CommentThread.reset_column_information
     CommentThread.all.each do |ct|
       if ct.commentable_type == 'Project'
         ct.update_attribute :commentable_type, 'List'
@@ -27,7 +26,6 @@ class RenameProjectsToLists < ActiveRecord::Migration
     rename_table :list_questions, :project_questions
     rename_column :project_questions, :list_id, :project_id
     
-    CommentThread.reset_column_information
     CommentThread.all.each do |ct|
       if ct.commentable_type == 'List'
         ct.update_attribute :commentable_type, 'Project'
