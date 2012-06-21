@@ -12,7 +12,7 @@ class QuestionCollaboratorsController < ApplicationController
   before_filter :get_question
   
   helper :questions
-
+asd
   def new
     @action_dialog_title = "Add a collaborator"
     @action_search_path = search_question_question_collaborators_path(params[:question_id])
