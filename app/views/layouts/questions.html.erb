@@ -33,6 +33,11 @@
          <% end %>
                      
          <% if @show_edit_question_link %>
+             <% if @question.can_be_new_versioned_by?(present_user) %>
+                 <p><%= link_to "Add to List", 
+                                question_new_version_path(@question),
+                                :method => :put %>
+             <% end %>
             <% if present_user.can_update?(@question) %>
               <p><%= link_to "Edit Question",
                              edit_question_path(@question) %></p>
