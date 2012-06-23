@@ -18,7 +18,7 @@
     <table>
       <tr id="is_public">
         <td>Make this list viewable to the public?</td>
-        <td type="checkbox" id="is_public_box"><%= f.check_box :is_public %></td>
+        <td type="checkbox" ><%= f.check_box :is_public, :id => "is_public_box" %></td>
       </tr>
       <tr id="view_drafts" <% unless @list.is_public %> 
                               style="display:none;"
@@ -32,8 +32,13 @@
   <%= content_for :javascript do %>
     <%= javascript_tag do %>
 
-      $("#is_public_box").bind('click', function() {
-        $("#view_drafts").slideToggle();
+      $("#is_public_box").live('click', function() {
+        if ($("#is_public_box:checked").exists()) {
+          $("#view_drafts").slideDown();
+        }
+        else {
+          $("#view_drafts").slideUp();
+        }
       });
     <% end %>
   <% end %>
