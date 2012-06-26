@@ -33,7 +33,7 @@
          <% end %>
                      
          <% if @show_edit_question_link %>
-             <% if @question.can_be_new_versioned_by?(present_user) %>
+             <% if @question.is_published? %>
                  <p><%= link_to "Add to List", 
                                 question_add_to_list_dialog_path(@question),
                                 :remote => true %></p>
