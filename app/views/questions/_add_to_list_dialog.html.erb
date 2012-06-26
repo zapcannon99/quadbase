@@ -6,7 +6,7 @@
    # lists
 %>
 
-<%= form_tag question_new_addition_to_list_path(question), :method => :put, :remote => true do %>
+<%= form_tag question_new_addition_to_list_path(question), :method => :put do %>
   <%= hidden_field_tag :question_id, question.id %>
   <br/><br/>
   <%= label_tag "Choose a List:" %>

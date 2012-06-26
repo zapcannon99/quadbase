@@ -346,11 +346,15 @@ class QuestionsController < ApplicationController
   def new_addition_to_list
     question = Question.from_param(params[:question_id])
     list = List.find(params[:list].keys.first)
+    raise SecurityTransgression unless list.can_be_read_by?(present_user)
     new_question = ListQuestion.new()
-    new_question.list_id = 10
-    new_question.question_id = 10
+    new_question.list_id = list.id
+    new_question.question_id = question.id
     new_question.save
     
+    respond_to do |format|
+      format.html { redirect_to list_path(list) }
+    end
   end
 
   # Originally, the license was set with the other attributes on the 
