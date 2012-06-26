@@ -286,7 +286,17 @@ class QuestionsController < ApplicationController
       flash[:alert] = "We could not create a derived question as requested."
       respond_to do |format|
         format.html { redirect_to question_path(@source_question) }
-      end      
+      end
+    end
+  end
+
+  def add_to_list_dialog
+    @question = Question.from_param(params[:question_id])
+    raise SecurityTransgression unless !present_user.is_anonymous? #@source_question.can_be_new_versioned_by?(present_user)
+    @lists = current_user.lists
+
+    respond_to do |format|
+      format.js
     end
   end
 
@@ -331,6 +341,20 @@ class QuestionsController < ApplicationController
       end
     end
     false
+  end
+
+  def new_addition_to_list
+    question = Question.from_param(params[:question_id])
+    list = List.find(params[:list].keys.first)
+    raise SecurityTransgression unless list.can_be_read_by?(present_user)
+    new_question = ListQuestion.new()
+    new_question.list_id = list.id
+    new_question.question_id = question.id
+    new_question.save
+    
+    respond_to do |format|
+      format.html { redirect_to list_path(list) }
+    end
   end
 
   # Originally, the license was set with the other attributes on the 

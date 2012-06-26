@@ -147,6 +147,8 @@ Quadbase::Application.routes.draw do
 
     get 'source'
     put 'new_version'
+    get 'add_to_list_dialog'
+    put 'new_addition_to_list'
     get 'derivation_dialog'
     put 'new_derivation'
 

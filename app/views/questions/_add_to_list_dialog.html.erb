@@ -1,0 +1,24 @@
+<%# Copyright 2011-2012 Rice University. Licensed under the Affero General Public 
+    License version 3 or later.  See the COPYRIGHT file for details. %>
+
+<% # Clients of this partial must supply the following variables:
+   # question
+   # lists
+%>
+
+<%= form_tag question_new_addition_to_list_path(question), :method => :put do %>
+  <%= hidden_field_tag :question_id, question.id %>
+  <br/><br/>
+  <%= label_tag "Choose a List:" %>
+  <table>
+  <% lists.each do |w| %>
+    <tr>
+      <td>
+        <%= submit_tag w.name, :name => "list[" + w.id.to_s + "]",
+                               :class => "#{submit_classes}",
+                               :style => "width: 100%; text-align: left;" %>
+      </td>
+    </tr>
+  <% end %>
+  </table>
+<% end %> 

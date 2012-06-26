@@ -316,5 +316,24 @@ class QuestionsControllerTest < ActionController::TestCase
                          :question => {:license_id => License.default.id}
     assert_redirected_to question_path(assigns(:question))
   end
+  
+  test "should add question to list" do
+    sign_in @user
+    assert_difference 'List.default_for_user!(@user).questions.count' do
+    put :new_addition_to_list, :question_id => @published_question.to_param,
+                               :list => {List.default_for_user!(@user).id => "blah"}
+    
+    end
+    assert_redirected_to list_path(List.default_for_user!(@user))
+  end
+
+  test "should not add question to list not authorized" do
+    assert_no_difference 'List.default_for_user!(@user).questions.count' do
+    put :new_addition_to_list, :question_id => @published_question.to_param,
+                               :list => {List.default_for_user!(@user).id => "blah"}
+    
+    end
+    assert_redirected_to login_path
+  end
 
 end

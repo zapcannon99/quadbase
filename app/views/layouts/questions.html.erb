@@ -33,6 +33,11 @@
          <% end %>
                      
          <% if @show_edit_question_link %>
+             <% if @question.can_be_new_versioned_by?(present_user) %>
+                 <p><%= link_to "Add to List", 
+                                question_add_to_list_dialog_path(@question),
+                                :remote => true %></p>
+             <% end %>
             <% if present_user.can_update?(@question) %>
               <p><%= link_to "Edit Question",
                              edit_question_path(@question) %></p>
@@ -40,7 +45,7 @@
             <% if @question.can_be_new_versioned_by?(present_user) %>
                 <p><%= link_to "Edit New Version", 
                                question_new_version_path(@question),
-                               :method => :put %>
+                               :method => :put %></p>
             <% end %>
          <% end %>
          
@@ -133,6 +138,8 @@
 
 <div id="derive_dialog" style="display:none" title="Question Derivation">
 </div>
+<div id="add_to_list_dialog" style="display:none" title="Add Question to List">
+</div>
 
 <% content_for :javascript do %>
    <%= javascript_tag do %>
@@ -146,5 +153,19 @@
       });
    <% end %>
 <% end %>
+
+<% content_for :javascript do %>
+   <%= javascript_tag do %>
+      $("#add_to_list_dialog").dialog({ 
+        autoOpen: false, 
+        modal: true, 
+        height:600, 
+        width:600, 
+        buttons: { "Close": function() { $(this).dialog("close"); }},  
+                   open: function(event, ui) { $("#text_query").val(''); $("#selected_type").val(''); }
+      });
+   <% end %>
+<% end %>
+
 
 <%= render :file => 'layouts/application' %>
