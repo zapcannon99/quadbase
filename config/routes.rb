@@ -97,6 +97,8 @@ Quadbase::Application.routes.draw do
   get 'help/messages', :to => 'help#message_help', :as => "messages"
   get 'help/roles', :to => 'help#roles_help', :as => 'roles'
   get 'help/topic/:topic_name', :to => 'help#topic', :as => 'topic_help'
+
+  get 'lists/public_lists', :to => 'lists#show_public', :as => 'public_lists'
   
   resources :lists do
     resources :list_members, :only => [:create, :new] do
@@ -104,6 +106,7 @@ Quadbase::Application.routes.draw do
         post 'search'
       end
     end
+    get 'show_public'
     commentable
   end
   
