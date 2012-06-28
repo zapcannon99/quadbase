@@ -7,7 +7,8 @@ class List < ActiveRecord::Base
   
   has_many :list_questions, :dependent => :destroy
   has_many :questions, :through => :list_questions
-
+  
+  
   has_one :comment_thread, :as => :commentable, :dependent => :destroy
   before_validation :build_comment_thread, :on => :create
   validates_presence_of :comment_thread
