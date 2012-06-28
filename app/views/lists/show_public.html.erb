@@ -1,7 +1,7 @@
 <%# Copyright 2011-2012 Rice University. Licensed under the Affero General Public 
     License version 3 or later.  See the COPYRIGHT file for details. %>
 
-<% @links = [ link_to('New List', new_list_path), link_to('View Public Lists', public_lists_path) ] %>
+<% @links = [ link_to('New List', new_list_path), link_to('My Lists', lists_path) ] %>
 
 <%= pageHeading("My Lists") %>
 
@@ -18,8 +18,8 @@
       <th></th>
    </tr>
 
-   <% @list_members.each do |member| %>
-      <% list = member.list %>
+   <% @lists.each do |list| %>
+      <% member = list.list_members.first %>
      <tr>
        <td><%= link_to list.name, list_path(list) %></td>
        <td style="text-align:center"><%= list.is_public %>

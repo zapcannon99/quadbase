@@ -22,7 +22,11 @@ class ListsController < ApplicationController
     respond_with(@list)
   end
 
-  def new
+  def show_public
+    respond_with(@lists = List.where(:is_public => true))
+  end
+
+  def news
     respond_with(@list = List.new)
   end
 

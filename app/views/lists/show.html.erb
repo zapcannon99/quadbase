@@ -1,8 +1,12 @@
 <%# Copyright 2011-2012 Rice University. Licensed under the Affero General Public 
     License version 3 or later.  See the COPYRIGHT file for details. %>
 
-<% @links = [ link_to('Edit List', edit_list_path(@list)), 
-              link_to('My Lists', lists_path) ] %>
+<% if @list.is_member?(current_user) %>
+  <% @links = [ link_to('Edit List', edit_list_path(@list)), 
+                link_to('My Lists', lists_path) ] %>
+<% else %>
+  <% @links = [ link_to('My Lists', lists_path) ] %>
+<% end %>
 
 <%= pageHeading("#{@list.name} Details") %>
 
