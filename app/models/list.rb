@@ -8,7 +8,6 @@ class List < ActiveRecord::Base
   has_many :list_questions, :dependent => :destroy
   has_many :questions, :through => :list_questions
   
-  
   has_one :comment_thread, :as => :commentable, :dependent => :destroy
   before_validation :build_comment_thread, :on => :create
   validates_presence_of :comment_thread
@@ -17,7 +16,7 @@ class List < ActiveRecord::Base
   accepts_nested_attributes_for :list_questions, :allow_destroy => true
 
   attr_accessible :name, :list_members_attributes, :list_questions_attributes
-  attr_accessible :is_public, :has_publicly_viewable_drafts
+  attr_accessible :is_public, :has_publicly_viewable_drafts, :order
   
   # Returns the default list for the specified user, or nil if it doesn't exist.  
   def self.default_for_user(user)    
@@ -66,9 +65,13 @@ class List < ActiveRecord::Base
     questions(reload).include?(question)
   end
 
+  def has_parent_list?
+    list.parent_list_id != nil
+  end 
+
   def can_be_joined_by?(user)
     !is_member?(user)
-  end 
+  end
   
   #############################################################################
   # Access control methods

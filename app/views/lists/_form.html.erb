@@ -9,7 +9,15 @@
     <tr>
       <th>List Name</th>
         <td><%= f.text_field :name %></td>
-     </tr>
+    </tr>
+  </table>
+  <br/>
+
+  <table class="sub_list_heading">
+    <tr>
+      <p><%= link_to "Add to List", set_parent_list_dialog_path(@question),
+                                    :remote => true %></p> 
+    </tr>
   </table>
   <br/>
 
@@ -41,6 +49,19 @@
       });
     <% end %>
   <% end %>
+
+  <% content_for :javascript do %>
+   <%= javascript_tag do %>
+      $("#set_parent").dialog({ 
+        autoOpen: false, 
+        modal: true, 
+        height:600, 
+        width:600, 
+        buttons: { "Close": function() { $(this).dialog("close"); }},  
+                   open: function(event, ui) { $("#text_query").val(''); $("#selected_type").val(''); }
+      });
+   <% end %>
+<% end %>
   
   <%= f.submit(nil , :class => "#{submit_classes}") %>
 <% end %>

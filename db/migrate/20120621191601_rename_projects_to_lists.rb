@@ -4,6 +4,8 @@ class RenameProjectsToLists < ActiveRecord::Migration
     change_table :lists do |t|
       t.boolean :is_public, :default => false
       t.boolean :has_publicly_viewable_drafts, :default => false
+      t.integer :parent_list_id
+      t.integer :order
     end
     rename_table :project_members, :list_members
     rename_column :list_members , :project_id, :list_id
@@ -23,6 +25,8 @@ class RenameProjectsToLists < ActiveRecord::Migration
     change_table :projects do |t|
       t.remove :is_public
       t.remove :has_publicly_viewable_drafts
+      t.remove :parent_list_id
+      t.remove :order
     end
     rename_table :list_members, :project_members
     rename_column :project_members, :list_id, :project_id

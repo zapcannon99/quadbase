@@ -107,6 +107,7 @@ Quadbase::Application.routes.draw do
       end
     end
     get 'show_public'
+    get 'set_parent_list_dialog'
     commentable
   end
   

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120627182358) do
+ActiveRecord::Schema.define(:version => 20120621191601) do
 
   create_table "announcements", :force => true do |t|
     t.integer  "user_id"
@@ -119,6 +119,8 @@ ActiveRecord::Schema.define(:version => 20120627182358) do
     t.datetime "updated_at"
     t.boolean  "is_public",                    :default => false
     t.boolean  "has_publicly_viewable_drafts", :default => false
+    t.integer  "parent_list_id"
+    t.integer  "order"
   end
 
   create_table "logic_libraries", :force => true do |t|
@@ -232,14 +234,6 @@ ActiveRecord::Schema.define(:version => 20120627182358) do
     t.text     "content_html"
     t.text     "explanation"
     t.boolean  "is_visible"
-  end
-
-  create_table "sub_lists", :force => true do |t|
-    t.integer  "list_id"
-    t.integer  "parent_list_id"
-    t.integer  "order"
-    t.datetime "created_at",     :null => false
-    t.datetime "updated_at",     :null => false
   end
 
   create_table "taggings", :force => true do |t|
