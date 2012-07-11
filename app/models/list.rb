@@ -41,7 +41,7 @@ class List < ActiveRecord::Base
   
   def self.all_for_user(user)
     List.default_for_user!(user) if ListMember.all_for_user(user).empty?
-    ListMember.all_for_user(user).collect{|wm| wm.project}
+    ListMember.all_for_user(user).collect{|wm| wm.list}
   end
   
   def is_default_for_user?(user)

@@ -30,6 +30,7 @@
 <%# Option initialization %>
 
 <%# entries ||= [] %>
+<% @list ||= List.new %>
 <% row_id_base ||= "question_" %>
 <% show_checkboxes = !local_assigns[:checkbox_options].nil? %>
 <% method_for_question ||= nil %>
