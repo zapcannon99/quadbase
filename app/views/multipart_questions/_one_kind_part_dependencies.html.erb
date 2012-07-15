@@ -7,9 +7,10 @@
 
   <div style="float:left">
     <%= text %> 
+    <% unless part.child_question.is_published? %>
     <span class="<%= common_id_class %>">
       (<%= link_to_function "Change", 
-                            "$('.#{common_id_class}').toggle();" %>)</span>:
+                            "$('.#{common_id_class}').toggle();" %>)</span><% end %>: 
 
     <% used_question_ids = [] %>
 
@@ -43,10 +44,12 @@
      
         <%= f.select(:independent_question_id, 
                      options_for_select(available_part_options)) %>
-               
+        
         <%= f.submit("Add" , :class => "#{submit_classes}") %>
       <% end %>
     </div>
   <% end %>
-  
+  <%= link_to "cancel", nil, :remote=>true, :style=>"float:right; display:none",
+                                            :class=>common_id_class,
+                                            :onclick=>"$('.#{common_id_class}').toggle();" %>
 </div>
