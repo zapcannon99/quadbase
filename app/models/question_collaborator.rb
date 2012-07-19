@@ -79,6 +79,16 @@ class QuestionCollaborator < ActiveRecord::Base
       target_role.save!
     end
   end
+
+  def self.remove_roles(target_user, target_question)
+    debugger
+    question_collaborator = QuestionCollaborator.find(where({:question_id => target_question.id, :user_id => target_user.id}))
+    return if !question_collaborator.has_role?(:any)
+    debugger
+    question_collaborator.is_author = false
+    question_collaborator.is_copyright_holder = false
+    question_collaborator.save!
+  end
   
   #############################################################################
   # Access control methods
@@ -102,8 +112,8 @@ class QuestionCollaborator < ActiveRecord::Base
   def can_be_sorted_by?(user)
     !question.is_published? &&
     (!user.is_anonymous? && question.is_project_member?(user))
-  end  
-  
+  end
+
 protected
 
   def question_not_published
@@ -118,6 +128,7 @@ protected
   end
 
   def no_roles
+    debugger
     return if (!has_role?(:any))
     errors.add(:base, "Cannot remove a collaborator that has been assigned roles.")
     false

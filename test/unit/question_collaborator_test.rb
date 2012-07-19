@@ -146,4 +146,19 @@ class QuestionCollaboratorTest < ActiveSupport::TestCase
     assert qr.has_role?(:is_listed)
   end
 
+  test "should destroy question collaborator when destroying question" do
+    qc = FactoryGirl.create(:question_collaborator)
+    q = qc.question
+    qc.is_copyright_holder = true
+    qc.is_author = true
+    qc.save!
+    q.destroy
+    assert_raise ActiveRecord::RecordNotFound do
+      QuestionCollaborator.find(qc.id)
+    end
+    #qc.is_author = true
+    #qc.save!
+    #sq.destroy
+  end
+
 end

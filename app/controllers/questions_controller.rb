@@ -212,6 +212,7 @@ class QuestionsController < ApplicationController
   def destroy
     @question = Question.from_param(params[:id])
     raise SecurityTransgression unless present_user.can_destroy?(@question)
+    QuestionCollaborator.remove_roles(present_user, @question)
     @question.destroy
     flash[:notice] = 'Draft deleted.'
     respond_with(@question) do |format|

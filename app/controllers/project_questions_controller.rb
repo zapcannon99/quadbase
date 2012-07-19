@@ -23,6 +23,7 @@ class ProjectQuestionsController < ApplicationController
     ProjectQuestion.transaction do 
       @project_questions.each do |wq|
         raise SecurityTransgression unless present_user.can_destroy?(wq)
+        QuestionCollaborator.remove_roles(present_user, wq.question)
         wq.destroy
       end
     end
