@@ -29,6 +29,10 @@ class QuestionDependencyPair < ActiveRecord::Base
 
   attr_accessible :independent_question_id, :dependent_question_id, :kind
 
+  def derive_dependency(new_main_question)
+    QuestionDependencyPair.create
+  end
+
   def is_requirement?
     "requirement" == kind
   end
