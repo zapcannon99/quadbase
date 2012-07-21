@@ -407,14 +407,16 @@ class Question < ActiveRecord::Base
       QuestionDerivation.create(:source_question_id => self.id, 
                                 :derived_question_id => derived_question.id,
                                 :deriver_id => user.id)
-      derive_dependency_pairs(derived_question)
+      derive_dependency_pairs(derived_question) if !self.dependencies.nil?
     end
-    
     derived_question
   end
   
+  def dependencies
+    [prerequisite_questions, dependent_questions, supporting_questions, supported_questions]
+  end
+
   def derive_dependency_pairs(derived_question)
-    dependencies = [prerequisite_questions, dependent_questions, supporting_questions, supported_questions]
     dependencies.each do |d|
       d.derive_dependency(derived_question)
     end
@@ -601,7 +603,7 @@ class Question < ActiveRecord::Base
       self.errors.add(:base, "There is a malformed formatting string in this question: #{e.message}")
     end
   end
-  
+
   #############################################################################
   # Access control methods
   #############################################################################
