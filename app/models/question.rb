@@ -407,18 +407,19 @@ class Question < ActiveRecord::Base
       QuestionDerivation.create(:source_question_id => self.id, 
                                 :derived_question_id => derived_question.id,
                                 :deriver_id => user.id)
-      derive_dependency_pairs(derived_question) if !self.dependencies.nil?
+      derive_dependency_pairs if self.dependencies.count != 0
     end
     derived_question
   end
   
   def dependencies
-    [prerequisite_questions, dependent_questions, supporting_questions, supported_questions]
+    prerequisite_question_pairs + dependent_question_pairs + supporting_question_pairs + supported_question_pairs
   end
 
-  def derive_dependency_pairs(derived_question)
+  def derive_dependency_pairs
+    debugger
     dependencies.each do |d|
-      d.derive_dependency(derived_question)
+      d.derive_dependency
     end
   end
 

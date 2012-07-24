@@ -29,7 +29,7 @@ class QuestionDependencyPair < ActiveRecord::Base
 
   attr_accessible :independent_question_id, :dependent_question_id, :kind
 
-  def derive_dependency(derived_question)
+  def derive_dependency(derived_question) debugger
     if derived_question.source_question.id == independent_question.id
       QuestionDependencyPair.create({ :independent_question_id => derived_question.id,
                                       :dependent_question_id => dependent_question.id,
