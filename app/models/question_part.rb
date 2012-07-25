@@ -29,8 +29,15 @@ class QuestionPart < ActiveRecord::Base
     return false if !child_question.is_published?
     self.child_question = child_question.new_derivation!(user, multipart_question.project)
     self.save!
+    derive_dependency_pairs(self) if self.dependencies.count != 0
     multipart_question.check_and_unlock_setup!
     true
+  end
+
+  def derive_dependency_pairs(derivation) debugger
+    child_question.dependencies.each do |d|
+      d.derive_dependency(derivation, multipart_question)
+    end
   end
 
   def self.sort(sorted_ids)
