@@ -8,14 +8,15 @@ class ListsControllerTest < ActionController::TestCase
     @user = FactoryGirl.create(:user)
     @list = List.default_for_user!(@user)
 
-    @other_user = FactoryGirl.create(:user)
-
     @public_list = FactoryGirl.create(:list)
     @public_list.is_public = true
+    @public_list.save!
 
     @public_drafts_list = FactoryGirl.create(:list)
     @public_drafts_list.is_public = true
     @public_drafts_list.has_publicly_viewable_drafts = true
+    @public_drafts_list.save!
+    @question = FactoryGirl.create(:list_question, :list => @public_drafts_list).question
   end
 
   test "should not get index not logged in" do
@@ -69,12 +70,6 @@ class ListsControllerTest < ActionController::TestCase
 
   test "should show list" do
     sign_in @user
-    get :show, :id => @list.to_param
-    assert_response :success
-  end
-
-  test "should show public list" do
-    user_login
     get :show, :id => @list.to_param
     assert_response :success
   end
@@ -147,13 +142,10 @@ class ListsControllerTest < ActionController::TestCase
     assert_redirected_to login_path
   end
 
-  test "should show viewable drafts" do
-  end
-
-  test "should not show nonviewable drafts not logged in" do
-  end
-
-  test "should not show nonviewable drafts not authorized" do
+  test "should show public list questions" do
+    user_login
+    get :show, :id => @public_list.to_param
+    assert_response :success
   end
 
 end
