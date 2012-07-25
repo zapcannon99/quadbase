@@ -30,7 +30,7 @@ class QuestionPart < ActiveRecord::Base
     original_question = child_question
     self.child_question = child_question.new_derivation!(user, multipart_question.project)
     self.save!
-    derive_original_dependency_pairs(original_question, self)
+    derive_original_dependency_pairs(original_question, child_question)
     multipart_question.check_and_unlock_setup!
     true
   end

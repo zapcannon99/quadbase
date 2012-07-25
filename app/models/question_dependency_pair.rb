@@ -29,39 +29,35 @@ class QuestionDependencyPair < ActiveRecord::Base
 
   attr_accessible :independent_question_id, :dependent_question_id, :kind
 
-  def derive_dependency(derived_question, multipart_question) debugger
+  def derive_dependency(derived_question, multipart_question)
+    dq = derived_question.becomes(derived_question.base_class)
     multipart_question.child_questions.each do |cq|
-      if derived_question.question.question_source.source_question_id == independent_question.id
-        if cq.id == dependent_question_id
-          debugger
-          QuestionDependencyPair.create({ :independent_question_id => derived_question.id,
-                                          :dependent_question_id => cq.id,
-                                          :kind => kind })
-          debugger
-        elsif cq.source_question.id == dependent_question_id
-          #debugger
-          pair = QuestionDependencyPair.where({ :independent_question_id => independent_question_id,
-                                                :dependent_question_id => cq.id,
-                                                :kind => kind })
-          #debugger
-          pair.independent_question_id = derived_question.id
-          #debugger
-        end
-      elsif derived_question.question.question_source.source_question_id == dependent_question.id
-        if cq.id == independent_question_id
-          debugger
-          QuestionDependencyPair.create({ :independent_question_id => cq.id,
-                                          :dependent_question_id => derived_question.id,
-                                          :kind => kind })
-         # debugger
-        elsif cq.source_question.id == independent_question_id 
-          debugger
-          pair = QuestionDependencyPair.where({ :independent_question_id => cq.id,
-                                                :dependent_question_id => dependent_question_id,
-                                                :kind => kind })
-          #debugger
-          pair.independent_question_id = derived_question.id
-          #debugger
+      qp = cq.becomes(cq.base_class)
+      if qp.id == independent_question_id || qp.id == dependent_question_id
+        if dq.question_source.source_question_id == independent_question.id
+          if qp.id == dependent_question_id
+            QuestionDependencyPair.create({ :independent_question_id => dq.id,
+                                            :dependent_question_id => qp.id,
+                                            :kind => kind })
+          elsif qp.source_question.id == dependent_question_id
+            pair = QuestionDependencyPair.where({ :independent_question_id => independent_question_id,
+                                                  :dependent_question_id => qp.id,
+                                                  :kind => kind })
+            pair.independent_question_id = dq.id
+            pair.save!
+          end
+        elsif dq.question_source.source_question_id == dependent_question.id
+          if qp.id == independent_question_id
+            QuestionDependencyPair.create({ :independent_question_id => qp.id,
+                                            :dependent_question_id => dq.id,
+                                            :kind => kind })
+          elsif qp.source_question.id == independent_question_id
+            pair = QuestionDependencyPair.where({ :independent_question_id => qp.id,
+                                                  :dependent_question_id => dependent_question_id,
+                                                  :kind => kind })
+            pair.independent_question_id = dq.id
+            pair.save!
+          end
         end
       end
     end
