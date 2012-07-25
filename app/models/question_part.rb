@@ -27,16 +27,19 @@ class QuestionPart < ActiveRecord::Base
 
   def unlock!(user)
     return false if !child_question.is_published?
+    original_question = child_question
     self.child_question = child_question.new_derivation!(user, multipart_question.project)
     self.save!
-    derive_dependency_pairs(self) if self.dependencies.count != 0
+    derive_original_dependency_pairs(original_question, self)
     multipart_question.check_and_unlock_setup!
     true
   end
 
-  def derive_dependency_pairs(derivation) debugger
-    child_question.dependencies.each do |d|
-      d.derive_dependency(derivation, multipart_question)
+  def derive_original_dependency_pairs(original_question, derivation)
+    if original_question.dependencies.count > 0
+      original_question.dependencies.each do |d|
+        d.derive_dependency(derivation, multipart_question)
+      end
     end
   end
 
