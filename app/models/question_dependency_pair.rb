@@ -29,36 +29,25 @@ class QuestionDependencyPair < ActiveRecord::Base
 
   attr_accessible :independent_question_id, :dependent_question_id, :kind
 
-  def derive_dependency(derived_question, multipart_question)
+  def derive_dependency(type, derived_question)
     dq = derived_question.becomes(derived_question.base_class)
-    multipart_question.child_questions.each do |cq|
-      qp = cq.becomes(cq.base_class)
-      if qp.id == independent_question_id || qp.id == dependent_question_id
-        if dq.question_source.source_question_id == independent_question.id
-          if qp.id == dependent_question_id
-            QuestionDependencyPair.create({ :independent_question_id => dq.id,
-                                            :dependent_question_id => qp.id,
-                                            :kind => kind })
-          elsif qp.source_question.id == dependent_question_id
-            pair = QuestionDependencyPair.where({ :independent_question_id => independent_question_id,
-                                                  :dependent_question_id => qp.id,
-                                                  :kind => kind })
-            pair.independent_question_id = dq.id
-            pair.save!
-          end
-        elsif dq.question_source.source_question_id == dependent_question.id
-          if qp.id == independent_question_id
-            QuestionDependencyPair.create({ :independent_question_id => qp.id,
-                                            :dependent_question_id => dq.id,
-                                            :kind => kind })
-          elsif qp.source_question.id == independent_question_id
-            pair = QuestionDependencyPair.where({ :independent_question_id => qp.id,
-                                                  :dependent_question_id => dependent_question_id,
-                                                  :kind => kind })
-            pair.independent_question_id = dq.id
-            pair.save!
-          end
-        end
+    if type == "independent"
+      if !dependent_question.is_published?
+        self.independent_question_id = dq.id
+        self.save!
+      else
+      QuestionDependencyPair.create({ :independent_question_id => dq.id,
+                                      :dependent_question_id => dependent_question_id,
+                                      :kind => kind })
+      end
+    elsif type == "dependent"
+      if !independent_question.is_published?
+        self.dependent_question_id = dq.id
+        self.save!
+      else
+      QuestionDependencyPair.create({ :independent_question_id => independent_question_id,
+                                      :dependent_question_id => dq.id,
+                                      :kind => kind })
       end
     end
   end
@@ -92,7 +81,7 @@ class QuestionDependencyPair < ActiveRecord::Base
 protected
 
   # We're only allowing the editors of a draft question to specify whether 
-  # that question is supported by another question.  
+  # that question is supported by another question. 
   def dependent_question_unpublished
     return if !dependent_question.is_published?
     self.errors.add(:base, "A question pair can only be set if the " + 

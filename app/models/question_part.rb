@@ -27,7 +27,7 @@ class QuestionPart < ActiveRecord::Base
 
   def unlock!(user)
     return false if !child_question.is_published?
-    original_question = child_question
+    original_question = child_question.becomes(child_question.base_class)
     self.child_question = child_question.new_derivation!(user, multipart_question.project)
     self.save!
     derive_original_dependency_pairs(original_question, child_question)
@@ -36,9 +36,16 @@ class QuestionPart < ActiveRecord::Base
   end
 
   def derive_original_dependency_pairs(original_question, derivation)
-    if original_question.dependencies.count > 0
-      original_question.dependencies.each do |d|
-        d.derive_dependency(derivation, multipart_question)
+    if original_question.independent_dependencies.count > 0
+      debugger
+      original_question.independent_dependencies.each do |d|
+        d.derive_dependency("independent", derivation)
+      end
+    end
+    if original_question.dependent_dependencies.count > 0
+      debugger
+      original_question.dependent_dependencies.each do |d|
+        d.derive_dependency("dependent", derivation)
       end
     end
   end

@@ -89,9 +89,13 @@ class Question < ActiveRecord::Base
            :through => :supported_question_pairs,
            :source => :dependent_question
 
-  def dependencies
-    prerequisite_question_pairs + dependent_question_pairs + supporting_question_pairs + supported_question_pairs
+  def dependent_dependencies
+    prerequisite_question_pairs + supporting_question_pairs
   end       
+
+  def independent_dependencies
+    dependent_question_pairs + supported_question_pairs
+  end     
 
   has_many :solutions, :dependent => :destroy
 
