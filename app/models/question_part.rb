@@ -37,13 +37,11 @@ class QuestionPart < ActiveRecord::Base
 
   def derive_original_dependency_pairs(original_question, derivation)
     if original_question.independent_dependencies.count > 0
-      debugger
       original_question.independent_dependencies.each do |d|
         d.derive_dependency("independent", derivation)
       end
     end
     if original_question.dependent_dependencies.count > 0
-      debugger
       original_question.dependent_dependencies.each do |d|
         d.derive_dependency("dependent", derivation)
       end
