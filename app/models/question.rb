@@ -17,6 +17,7 @@ class Question < ActiveRecord::Base
   has_many :collaborators, 
            :through => :question_collaborators,
            :source => :user
+           :dependent => :destroy
   has_many :project_questions, :dependent => :destroy
 
   belongs_to :license
