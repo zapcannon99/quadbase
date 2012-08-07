@@ -57,4 +57,51 @@ class QuestionDependencyPairTest < ActiveSupport::TestCase
     qdp = FactoryGirl.create(:question_dependency_pair, :kind => "support")
     assert qdp.is_support?
   end
+
+  # Next few tests make sure that the derive_dependency function works correctly
+  # The case for this test is that a person has already unlocked the dependent,
+  # and unlock the independent. Rather than make a new pair, the pair will update the existing pair
+  # to conserve space in the SQL database.
+  test "should update dependency when published independent derived and unpublished dependent" do
+    u = FactoryGirl.create(:user)
+    iq = make_simple_question(:set_license => true)
+    iq.create!(u)
+    iq.publish!(u)
+    dq = FactoryGirl.create(:simple_question)
+    qdp = FactoryGirl.create(:question_dependency_pair, :independent_question => iq, :dependent_question => dq, :kind => "support") #kind doesn't matter
+    qdp.independent_question.new_derivation!(u)
+    derived_question = Question.find(:last)
+    assert iq != Question.find(:last)
+    assert derived_question.source_question == qdp.independent_question
+    assert derived_question.source_question == iq
+    original_qdp = QuestionDependencyPair.new
+    original_qdp.attributes = qdp.attributes
+    qdp.derive_dependency("independent", derived_question)
+    qdp.reload
+    derived_qdp = QuestionDependencyPair.find(:last)
+    assert derived_qdp.independent_question == derived_question
+    assert qdp.independent_question.source_question == iq
+    assert qdp.dependent_question == dq
+    assert qdp.kind == "support"
+  end
+=begin
+  test "should create new dependency when published dependent derived and published independent" do
+    u = FactoryGirl.create(:user)
+    iq = make_simple_question(:set_license => true)
+    iq.create!(u)
+    iq.publish!(u)
+    dq = make_simple_question(:set_license => true)
+    dq.create!(u)
+    dq.publish!(u)
+    original_qdp = FactoryGirl.create(:question_dependency_pair, :dependent_question => dq)
+    original_qdp.dependent_question.new_derivation!(u)
+    derived_question = Question.find(:last)
+    assert derived_question.source_question == original_qdp.dependent_question
+
+    derived_qdp = original_qdp.derive_dependency("dependent", derived_question)
+    assert derived_qdp.independent_question == original_qdp.independent_question
+    assert derived_qdp.dependent_question == original_qdp.dependent_question
+    assert derived_qdp.kind == original_qdp.kind
+  end
+=end
 end

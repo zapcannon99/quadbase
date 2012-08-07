@@ -30,24 +30,27 @@ class QuestionDependencyPair < ActiveRecord::Base
   attr_accessible :independent_question_id, :dependent_question_id, :kind
 
   def derive_dependency(type, derived_question)
-    dq = derived_question.becomes(derived_question.base_class)
     if type == "independent"
       if !dependent_question.is_published?
-        self.independent_question_id = dq.id
+        self.independent_question_id = derived_question.id
         self.save!
+=begin
+Since we currently cannot create a depedency where the dependent question is published,
+this section is commented out, but will work (theoretically) without the validate
       else
-      QuestionDependencyPair.create({ :independent_question_id => dq.id,
+      QuestionDependencyPair.create({ :independent_question_id => derived_question.id,
                                       :dependent_question_id => dependent_question_id,
-                                      :kind => kind })
+                                      :kind => kind})
+=end      
       end
     elsif type == "dependent"
       if !independent_question.is_published?
-        self.dependent_question_id = dq.id
+        self.dependent_question_id = derived_question.id
         self.save!
       else
       QuestionDependencyPair.create({ :independent_question_id => independent_question_id,
-                                      :dependent_question_id => dq.id,
-                                      :kind => kind })
+                                      :dependent_question_id => derived_question.id,
+                                      :kind => kind})
       end
     end
   end

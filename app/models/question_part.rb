@@ -27,7 +27,7 @@ class QuestionPart < ActiveRecord::Base
 
   def unlock!(user)
     return false if !child_question.is_published?
-    original_question = child_question.becomes(child_question.base_class)
+    original_question = child_question
     self.child_question = child_question.new_derivation!(user, multipart_question.project)
     self.save!
     derive_original_dependency_pairs(original_question, child_question)

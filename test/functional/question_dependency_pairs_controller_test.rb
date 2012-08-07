@@ -4,8 +4,12 @@
 require 'test_helper'
 
 class QuestionDependencyPairsControllerTest < ActionController::TestCase
-  # Replace this with your real tests.
-  test "the truth" do
-    assert true
+  
+	setup do
+		@user = FactoryGirl.create(:user)
+		@qdp = FactoryGirl.create(:question_dependency_pair)
+	end
+
+  test "should not create new dependency not logged in" do
   end
 end
