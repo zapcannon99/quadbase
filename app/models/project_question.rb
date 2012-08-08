@@ -5,6 +5,7 @@ class ProjectQuestion < ActiveRecord::Base
   belongs_to :project
   belongs_to :question
 
+  after_destroy :remove_roles
   after_destroy :destroy_projectless_draft_question
   
   # A published question (which is immutable) can be in any number of workgroups.
@@ -59,6 +60,10 @@ class ProjectQuestion < ActiveRecord::Base
 
   def destroy_projectless_draft_question
     question.destroy if (!question.is_published? && question.project_questions.empty?)
+  end
+
+  def remove_roles
+    question.remove_roles!
   end
   
   #############################################################################

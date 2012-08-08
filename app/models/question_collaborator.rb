@@ -80,12 +80,11 @@ class QuestionCollaborator < ActiveRecord::Base
     end
   end
 
-  def self.remove_roles(target_user, target_question)
-    question_collaborator = QuestionCollaborator.find(where({:question_id => target_question.id, :user_id => target_user.id}))
-    return if !question_collaborator.has_role?(:any)
-    question_collaborator.is_author = false
-    question_collaborator.is_copyright_holder = false
-    question_collaborator.save!
+  def remove_roles
+    return if !self.has_role?(:any)
+    self.is_author = false
+    self.is_copyright_holder = false
+    self.save!
   end
   
   #############################################################################
@@ -126,6 +125,7 @@ protected
   end
 
   def no_roles
+    reload
     return if (!has_role?(:any))
     errors.add(:base, "Cannot remove a collaborator that has been assigned roles.")
     false

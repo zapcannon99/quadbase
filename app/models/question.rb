@@ -16,7 +16,7 @@ class Question < ActiveRecord::Base
            :dependent => :destroy
   has_many :collaborators, 
            :through => :question_collaborators,
-           :source => :user
+           :source => :user,
            :dependent => :destroy
   has_many :project_questions, :dependent => :destroy
 
@@ -594,6 +594,17 @@ class Question < ActiveRecord::Base
       self.errors.add(:base, "There is a malformed formatting string in this question: #{e.message}")
     end
   end
+
+  def remove_roles!
+    if version_was.nil?
+      question_collaborators.each do |qc|
+        qc.remove_roles
+      end
+    else
+      errors.add(:base, "Changes cannot be made to a published question.#{self.changes}")
+      false
+    end
+  end
   
   #############################################################################
   # Access control methods
@@ -692,7 +703,7 @@ protected
   def assign_number
     self.number ||= (Question.maximum('number') || 1) + 1
   end
-  
+
   def not_published
     return if (version_was.nil?)
     errors.add(:base, "Changes cannot be made to a published question.#{self.changes}")
